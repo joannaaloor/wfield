@@ -164,8 +164,8 @@ def svd_blockwise(dat,frames_average,
         arr = np.array(dat[:,:,i[0]:i[1],j[0]:j[1]],dtype='float32')
         if subtract_by_average:
             arr -= frames_average[:,i[0]:i[1],j[0]:j[1]]
-        if divide_by_average:
-            arr /= frames_average[:,i[0]:i[1],j[0]:j[1]]
+            if divide_by_average:
+                arr /= frames_average[:,i[0]:i[1],j[0]:j[1]]
         bw,bh = arr.shape[-2:]
         arr = arr.reshape([-1,np.multiply(*arr.shape[-2:])])
         u, s, vt = randomized_svd(arr.T,

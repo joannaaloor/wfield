@@ -30,8 +30,7 @@ def hemodynamic_correction(U, SVT_470,SVT_405,
                            freq_lowpass = 14.,
                            freq_highpass = 0.1,
                            nchunks = 1024,
-                           run_parallel = True, 
-                           divide_by_average = True):
+                           run_parallel = True):
     # split channels and subtract the mean to each
     SVTa = SVT_470#[:,0::2]
     SVTb = SVT_405#[:,1::2]
@@ -77,14 +76,6 @@ def hemodynamic_correction(U, SVT_470,SVT_405,
     T = np.dot(np.linalg.pinv(U),(U.T*rcoeffs).T)
     # apply correction
     SVTcorr = SVTa - np.dot(T,SVTb)
-
-    if divide_by_average:
-        # calculate dF/F
-        F0 = np.nanmean(SVTcorr,axis=1,keepdims=True)
-        SVTcorr = (SVTcorr - F0) / F0 
-    else:
-        # return a zero mean SVT
-        SVTcorr = SVTcorr - np.nanmean(SVTcorr,axis=1,keepdims=True)
     # put U dims back in case its used sequentially
     U = U.reshape(dims)
     
