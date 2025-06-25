@@ -171,7 +171,7 @@ def svd_blockwise(dat,frames_average,
         u, s, vt = randomized_svd(arr.T,
                                   n_components=block_k,
                                   n_iter=5,
-                                  power_iteration_normalizer ='LQ',
+                                  power_iteration_normalizer ='QR',
                                   random_state=random_state)
         block_U[iblock,:bw,:bh,:] = u.reshape([bw,bh,-1])
         block_SVT[iblock] = np.dot(np.diag(s),vt)
