@@ -117,7 +117,6 @@ def svd_blockwise(dat,frames_average,
                   k = 200, block_k = 20,
                   blocksize=120, overlap=8,
                   divide_by_average = False,
-                  subtract_by_average = False,
                   random_state=42):
     '''
     Computes the blockwise single value decomposition for a matrix that does not fit in memory.
@@ -162,10 +161,9 @@ def svd_blockwise(dat,frames_average,
                              desc= 'Computing SVD on data chunks:'):
         # subtract the average (this should be made the baseline instead)
         arr = np.array(dat[:,:,i[0]:i[1],j[0]:j[1]],dtype='float32')
-        if subtract_by_average:
-            arr -= frames_average[:,i[0]:i[1],j[0]:j[1]]
-            if divide_by_average:
-                arr /= frames_average[:,i[0]:i[1],j[0]:j[1]]
+        arr -= frames_average[:,i[0]:i[1],j[0]:j[1]]
+        if divide_by_average:
+            arr /= frames_average[:,i[0]:i[1],j[0]:j[1]]
         bw,bh = arr.shape[-2:]
         arr = arr.reshape([-1,np.multiply(*arr.shape[-2:])])
         u, s, vt = randomized_svd(arr.T,

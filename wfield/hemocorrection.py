@@ -76,6 +76,8 @@ def hemodynamic_correction(U, SVT_470,SVT_405,
     T = np.dot(np.linalg.pinv(U),(U.T*rcoeffs).T)
     # apply correction
     SVTcorr = SVTa - np.dot(T,SVTb)
+    # return a zero mean SVT
+    SVTcorr = (SVTcorr.T - np.nanmean(SVTcorr,axis=1)).T.astype('float32')
     # put U dims back in case its used sequentially
     U = U.reshape(dims)
     
